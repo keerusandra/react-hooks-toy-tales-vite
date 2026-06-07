@@ -1,44 +1,99 @@
-# Practice Challenge: Toy Tales
+Toy Tales
+Overview
 
-You've got a friend in need! Again!
+Toy Tales is a React application that allows users to manage a collection of toys. Users can view toys, add new toys, delete toys, and like toys. Data is persisted using a JSON server.
 
-Andy has misplaced of his toys (again) and need your help to organize them.
+Setup Instructions
+1. Install dependencies
+npm install
+2. Start backend server
+npm run server
 
-## Setup
+Backend runs at:
 
-All the information about Andy's toys can be found in the `db.json` file. We'll
-be using `json-server` to create a RESTful API for our database.
+http://localhost:3001
+3. Start frontend application
+npm run dev
 
-Run `npm install` to install our dependencies.
+Frontend runs at:
 
-Then, run `npm run server` to start up `json-server` on `http://localhost:3001`.
+http://localhost:3000
+4. Run tests
+npm run test
+API Endpoints
+GET /toys
 
-In another tab, run `npm run dev` to start up our React app at `http://localhost:3000`.
+Fetch all toys.
 
-In another tab, run `npm run test` to run the test suite.
+Response:
 
-Before you start building out the application, the first step that you should
-take is to examint the current code and component hierarchy. This will tell you 
-how components can pass data to each other as well as where that information should 
-be stored.
+[
+  {
+    "id": 1,
+    "name": "Toy Name",
+    "image": "image-url",
+    "likes": 5
+  }
+]
+POST /toys
 
-## Deliverables
+Create a new toy.
 
-- _When our application loads_, make a GET request to `/toys` to fetch the toy
-  array. Given your component tree, think about which component should be
-  responsible for the array. After you have put the data in the proper
-  component, your next job is to render the `ToyCard` components on the page.
+Headers:
 
-- _When the `ToyForm` is submitted_, make a POST request to `/toys` to save a
-  new toy to the server. Using the ideas of controlled form and inverse data
-  flow, think about how to render a new `ToyCard` for the toy that you created.
+{
+  "Content-Type": "application/json"
+}
 
-- _When the `Donate to Goodwill` button is clicked_, make a DELETE request to
-  `/toys/:id` with the ID of the toy that was clicked to delete the toy from the
-  server. The `ToyCard` that you clicked on should also be removed from the DOM.
+Body:
 
-- _When the like button is clicked_, make a PATCH request to `/toys/:id` with
-  the id of the toy that was clicked, along with the new number of likes (this
-  should be sent in the body of the PATCH request, as a object:
-  `{ likes: 10 }`), to update the toy on the server. Clicking on the button
-  should also increase the number of likes on the DOM.
+{
+  "name": "string",
+  "image": "string",
+  "likes": number
+}
+DELETE /toys/:id
+
+Delete a toy by ID.
+
+PATCH /toys/:id
+
+Update toy likes.
+
+Body:
+
+{
+  "likes": number
+}
+
+Features / User Stories
+1. View Toys
+On page load, the app fetches all toys from /toys
+Toys are stored in React state
+Each toy is displayed using a ToyCard component
+2. Add Toy
+Users can submit the ToyForm
+Sends a POST request to /toys
+Newly created toy is added to state and rendered immediately
+3. Delete Toy
+Clicking “Donate to GoodWill” deletes a toy
+Sends DELETE request to /toys/:id
+Removes toy from UI after successful response
+4. Like Toy
+Clicking “Like” increases toy likes
+Sends PATCH request to /toys/:id
+Updates likes in both backend and UI
+
+Technical Notes
+State is managed in the top-level component (App)
+Uses useEffect for initial data fetching
+Implements controlled form inputs
+Uses inverse data flow (props passed down, functions passed up)
+All updates sync with backend via REST API
+
+Project Structure
+App.jsx – Main state and API logic
+ToyContainer.jsx – Renders list of toys
+ToyCard.jsx – Displays individual toy
+ToyForm.jsx – Handles toy creation form
+Header.jsx – Static header component
